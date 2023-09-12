@@ -1,61 +1,39 @@
 import { Role } from '@roles/entities/Role'
-
 import { dataSource } from '@shared/typeorm'
 import { Repository } from 'typeorm'
+import {
+  CreateRoleDTO,
+  IRolesRepository,
+  PaginateParams,
+  RolesPaginateProperties,
+} from './IRolesRepository'
 
-type CreateRoleDTO = {
-  name: string
-}
-
-export type PaginateParams = {
-  page: number
-  skip: number
-  take: number
-}
-
-export type RolesPaginateProperties = {
-  per_page: number
-  total: number
-  current_page: number
-  data: Role[]
-}
-
-export class RolesRepository {
+export class RolesRepository implements IRolesRepository {
   private repository: Repository<Role>
-  private static INSTANCE: RolesRepository
 
-  private constructor() {
+  constructor() {
     this.repository = dataSource.getRepository(Role)
-  }
-
-  public static getInstance(): RolesRepository {
-    if (!RolesRepository) {
-      RolesRepository.INSTANCE = new RolesRepository()
-    }
-    return RolesRepository.INSTANCE
   }
 
   async create({ name }: CreateRoleDTO): Promise<Role> {
     const role = this.repository.create({ name })
-    return role
+    return this.repository.save(role)
   }
+
   async save(role: Role): Promise<Role> {
-    const roleSaved = await this.repository.save(role)
-    return roleSaved
+    return this.repository.save(role)
   }
 
   async delete(role: Role): Promise<void> {
     await this.repository.remove(role)
   }
 
-  async findbyName(name: string): Promise<Role | null> {
-    const role = await this.repository.findOneBy({ name: name })
-    return role
+  async findByName(name: string): Promise<Role | null> {
+    return this.repository.findOneBy({ name })
   }
 
-  async findById(id): Promise<Role | null> {
-    const role = await this.repository.findOneBy({ id })
-    return role
+  async findById(id: string): Promise<Role | null> {
+    return this.repository.findOneBy({ id })
   }
 
   async findAll({
@@ -68,7 +46,6 @@ export class RolesRepository {
       .skip(skip)
       .take(take)
       .getManyAndCount()
-
     const result = {
       per_page: take,
       total: count,

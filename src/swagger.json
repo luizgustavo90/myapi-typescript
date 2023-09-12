@@ -31,7 +31,25 @@
         },
         "responses": {
           "201": {
-            "description": "Role created."
+            "description": "Role created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Role already exists."
@@ -42,9 +60,252 @@
         "tags": ["Role"],
         "summary": "List all roles",
         "description": "Returns all roles paginated.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page Number",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "example": "page=1"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Page Limit",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "example": "limit=15"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Success."
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "per_page": 15,
+                  "total": 2,
+                  "current_page": 1,
+                  "data": [
+                    {
+                      "id": "fde5961c-618e-4eb3-9607-8b42e4133131",
+                      "name": "max",
+                      "createdAt": "2023-09-04T19:34:31.000Z"
+                    },
+                    {
+                      "id": "dc555934-4586-4942-afec-dec3ed02b67e",
+                      "name": "juanito",
+                      "createdAt": "2023-09-04T19:38:14.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles/{id}": {
+      "put": {
+        "tags": ["Roles"],
+        "summary": "Update a role",
+        "description": "update a role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identify of a role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": {
+              "id": "74c8f2c7-5d9d-4c80-872c-c4f619fe6e78",
+              "name": "Admin",
+              "createdAt": "2023-09-04T19:34:31.000Z"
+            },
+            "style": "label"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Page Limit",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "example": "limit=15"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "example": "administrator"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Role not found"
+          }
+        }
+      },
+      "/roles/{id}": {
+        "get": {
+          "tags": ["Roles"],
+          "summary": "Find roles by ID",
+          "description": "Return roles based on ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identify of a role",
+              "required": false,
+              "schema": {
+                "type": "string"
+              },
+              "style": "label"
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Page Limit",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "example": "limit=15"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "example": {
+                    "id": "74c8f2c7-5d9d-4c80-872c-c4f619fe6e78",
+                    "name": "Admin",
+                    "createdAt": "2023-09-04T19:34:31.000Z"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "404": {
+              "description": "Role not found"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Role"],
+          "summary": "Delete Role by ID",
+          "description": "Delete",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "description": "Page Number",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "example": "page=1"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Page Limit",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "example": "limit=15"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No content",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "per_page": 15,
+                    "total": 2,
+                    "current_page": 1,
+                    "data": [
+                      {
+                        "id": "fde5961c-618e-4eb3-9607-8b42e4133131",
+                        "name": "max",
+                        "createdAt": "2023-09-04T19:34:31.000Z"
+                      },
+                      {
+                        "id": "dc555934-4586-4942-afec-dec3ed02b67e",
+                        "name": "juanito",
+                        "createdAt": "2023-09-04T19:38:14.000Z"
+                      }
+                    ]
+                  }
+                }
+              },
+              "400": {
+                "description": "Bad Request"
+              },
+              "404": {
+                "description": "Role not found"
+              }
+            }
           }
         }
       }

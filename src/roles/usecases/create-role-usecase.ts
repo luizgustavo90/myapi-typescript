@@ -1,22 +1,26 @@
 import { Role } from '@roles/entities/Role'
-import { RolesRepository } from '@roles/repositories/RolesRepository'
+import { IRolesRepository } from '@roles/repositories/IRolesRepository'
 import { AppError } from '@shared/errors/AppError'
+import { inject, injectable } from 'tsyringe'
 
 type CreateRoleDTO = {
   name: string
 }
 
+@injectable()
 export class CreateRoleUseCase {
-  constructor(private rolesRepository: RolesRepository) {}
+  constructor(
+    @inject('RolesRepository') private rolesRepository: IRolesRepository,
+  ) {}
 
-  execute({ name }: CreateRoleDTO): Role {
-    const checkRole = this.rolesRepository.findbyName(name)
+  async execute({ name }: CreateRoleDTO): Promise<Role> {
+    const checkRole = await this.rolesRepository.findByName(name)
 
     if (checkRole) {
       throw new AppError('Role already exists')
     }
 
-    const role = this.rolesRepository.create({ name })
+    const role = await this.rolesRepository.create({ name })
     return role
   }
 }
