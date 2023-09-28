@@ -1,11 +1,11 @@
-import { inject, injectable } from 'tsyringe'
+import { User } from '@users/entities/User'
 import { hash } from 'bcryptjs'
 import { IRolesRepository } from '@roles/repositories/IRolesRepository'
 import { AppError } from '@shared/errors/AppError'
 import { IUsersRepository } from '@users/repositories/IUsersRepository'
-import { User } from '@users/entities/User'
+import { inject, injectable } from 'tsyringe'
 
-type CreateUserDto = {
+type CreateUserDTO = {
   name: string
   email: string
   password: string
@@ -26,7 +26,7 @@ export class CreateUserUseCase {
     password,
     isAdmin,
     roleId,
-  }: CreateUserDto): Promise<User> {
+  }: CreateUserDTO): Promise<User> {
     console.log('esta entrando no usecase')
     const emailExists = await this.usersRepository.findByEmail(email)
     if (emailExists) {

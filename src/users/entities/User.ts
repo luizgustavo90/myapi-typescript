@@ -7,8 +7,9 @@ import {
 } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
 import { Role } from '../../roles/entities/Role'
+import { Exclude, Expose } from 'class-transformer'
 
-@Entity('user')
+@Entity('users')
 export class User {
   @PrimaryColumn()
   id?: string
@@ -17,6 +18,7 @@ export class User {
   @Column()
   email: string
   @Column()
+  @Exclude()
   password: string
   @Column()
   isAdmin: boolean
@@ -29,6 +31,14 @@ export class User {
 
   @CreateDateColumn()
   createdAt: Date
+
+  @Expose({ name: 'avatar_url' })
+  getAvatarUrl(): string | null {
+    if (!this.avatar) {
+      return null
+    }
+    return `${process.env.AVATAR_URL}/${this.avatar}`
+  }
 
   constructor() {
     if (!this.id) {

@@ -22,6 +22,7 @@ export class ListUsersUseCase {
   }: ListUsersUseCaseParams): Promise<UsersPaginateProperties> {
     const take = limit
     const skip = (Number(page) - 1) * take
-    return this.usersRepository.findAll({ page, skip, take })
+    const users = this.usersRepository.findAll({ page, skip, take })
+    return users
   }
 }
