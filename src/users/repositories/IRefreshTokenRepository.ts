@@ -1,7 +1,6 @@
 import { RefreshToken } from '@users/entities/RefreshToken'
-import { MongoInvalidArgumentError } from 'typeorm'
 
-type CreateRefreshTokenDTO = {
+export type CreateRefreshTokenDTO = {
   token: string
   valid: boolean
   user_id: string
