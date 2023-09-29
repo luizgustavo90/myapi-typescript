@@ -7,10 +7,17 @@ import { CreateLoginController } from '@users/controllers/create-login-controlle
 import { UpdateAvatarController } from '@users/controllers/update-avatar-controller'
 import { ShowProfileController } from '@users/controllers/show-profile-controller'
 import { UpdateProfileController } from '@users/controllers/update-profile-controller'
+import { IRefreshTokenRepository } from '@users/repositories/IRefreshTokenRepository'
+import { RefreshTokenRepository } from '@users/repositories/RefreshTokenRepository'
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
+)
+
+container.registerSingleton<IRefreshTokenRepository>(
+  'RefreshTokenRepository',
+  RefreshTokenRepository,
 )
 
 container.registerSingleton('CreateUserController', CreateUserController)
