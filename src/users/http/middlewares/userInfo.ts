@@ -1,7 +1,4 @@
-import { AppError } from '@shared/errors/AppError'
 import { NextFunction, Request, Response, response } from 'express'
-import { Secret, verify } from 'jsonwebtoken'
-import authConfig from '@config/auth'
 
 type JwtPayloadProps = {
   sub: string
