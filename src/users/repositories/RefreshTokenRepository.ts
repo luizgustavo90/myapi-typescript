@@ -5,7 +5,6 @@ import {
 } from './IRefreshTokenRepository'
 import { Repository } from 'typeorm'
 import { dataSource } from '@shared/typeorm'
-import { appendFile } from 'fs'
 import { AppError } from '@shared/errors/AppError'
 
 export class RefreshTokenRepository implements IRefreshTokenRepository {

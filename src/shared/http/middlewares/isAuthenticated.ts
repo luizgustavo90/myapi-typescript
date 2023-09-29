@@ -14,7 +14,11 @@ export const isAuthenticated = (
 ) => {
   const authHeader = req.headers.authorization
   if (!authHeader) {
-    throw new AppError('Failed to verify access token')
+    return res.status(401).json({
+      error: true,
+      code: 'token.invalid',
+      message: 'Access token not present',
+    })
   }
   const token = authHeader.replace('Bearer ', '')
   try {
@@ -22,6 +26,12 @@ export const isAuthenticated = (
     const { sub } = decodedToken as JwtPayloadProps
     req.user = { id: sub }
   } catch (err) {
-    throw new AppError(err.message, 401)
+    if (!token) {
+      return res.status(401).json({
+        error: true,
+        code: 'token.expired',
+        message: 'Access token not present',
+      })
+    }
   }
 }
