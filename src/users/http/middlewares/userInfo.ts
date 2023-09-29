@@ -1,13 +1,18 @@
-import { NextFunction, Request, Response, response } from 'express'
+import { NextFunction, Request, Response } from 'express'
+import { decode } from 'jsonwebtoken'
 
 type JwtPayloadProps = {
   sub: string
 }
 
-export const userInfo = (req: Request, res: Response, next: NextFunction) => {
+export const addUserInfo = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const authHeader = req.headers.authorization
   if (!authHeader) {
-    return response.status(401).json({
+    return res.status(401).json({
       error: true,
       code: 'token.invalid',
       message: 'Access token not present',
@@ -15,7 +20,7 @@ export const userInfo = (req: Request, res: Response, next: NextFunction) => {
   }
   const token = authHeader.replace('Bearer ', '')
   if (!token) {
-    return response.status(401).json({
+    return res.status(401).json({
       error: true,
       code: 'token.invalid',
       message: 'Access token not present',
@@ -26,7 +31,7 @@ export const userInfo = (req: Request, res: Response, next: NextFunction) => {
     const { sub } = decodedToken as JwtPayloadProps
     req.user = { id: sub }
   } catch (err) {
-    return response.status(401).json({
+    return res.status(401).json({
       error: true,
       code: 'token.invalid',
       message: 'Access token not present',

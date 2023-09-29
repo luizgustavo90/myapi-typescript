@@ -9,6 +9,8 @@ import { CreateLoginController } from '@users/controllers/create-login-controlle
 import { isAuthenticated } from '@shared/http/middlewares/isAuthenticated'
 import { UpdateAvatarController } from '@users/controllers/update-avatar-controller'
 import { ShowProfileController } from '@users/controllers/show-profile-controller'
+import { CreateAccessAndRefreshTokenController } from '@users/controllers/create-refreshtoken-controller'
+import { addUserInfo } from '../middlewares/userInfo'
 
 const usersRoute = Router()
 const createUserController = container.resolve(CreateUserController)
@@ -17,6 +19,9 @@ const createLoginController = container.resolve(CreateLoginController)
 const updateAvatarController = container.resolve(UpdateAvatarController)
 const showProfileController = container.resolve(ShowProfileController)
 const updateProfileController = container.resolve(UpdateAvatarController)
+const createAccessAndRefreshTokenController = container.resolve(
+  CreateAccessAndRefreshTokenController,
+)
 const upload = multer(uploadConfig)
 
 usersRoute.post(
@@ -38,6 +43,7 @@ usersRoute.post(
 
 usersRoute.get(
   '/',
+  addUserInfo,
   isAuthenticated,
   celebrate({
     [Segments.QUERY]: Joi.object().keys({
@@ -52,6 +58,7 @@ usersRoute.get(
 
 usersRoute.post(
   '/login',
+  addUserInfo,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -60,6 +67,19 @@ usersRoute.post(
   }),
   (req, res) => {
     return createLoginController.handle(req, res)
+  },
+)
+
+usersRoute.post(
+  '/refresh_token',
+
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      refresh_token: Joi.string().email().required(),
+    }),
+  }),
+  (req, res) => {
+    return createAccessAndRefreshTokenController.handle(req, res)
   },
 )
 

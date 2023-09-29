@@ -49,7 +49,6 @@ export class CreateAccessAndRefreshTokenUseCase {
     ) {
       throw new AppError('Refresh token is invalid', 401)
     }
-
     await this.refreshTokenRepository.invalidate(refreshTokenExists)
     const accessToken = sign({}, jwtconfig.jwt.secret, {
       subject: user.id,
